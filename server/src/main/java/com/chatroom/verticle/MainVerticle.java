@@ -18,7 +18,6 @@ public class MainVerticle extends AbstractVerticle {
 
     @Override
     public void start(Future<Void> startFuture) throws Exception {
-        initDataSource();
 
         HttpServer server = vertx.createHttpServer();
 
@@ -37,36 +36,4 @@ public class MainVerticle extends AbstractVerticle {
         server.requestHandler(router::accept).listen(8080);
     }
 
-    private void initDataSource() {
-        try {
-            Server.createTcpServer().start();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        vertx.executeBlocking(future -> {
-            try {
-                Server server = Server.createTcpServer().start();
-                future.complete(server);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }, res -> {
-            System.out.println("The result is: " + res.result());
-            JsonObject config = new JsonObject()
-                    .put("url", "jdbc:h2:file:~/.h2/db;AUTO_SERVER=TRUE")
-                    .put("driver_class", "org.h2.Driver")
-                    .put("user", "root")
-                    .put("password", "123456");
-
-            JDBCClient.createShared(vertx, config);
-        });
-
-//        JsonObject config = new JsonObject()
-//                .put("url", "jdbc:h2:file:~/.h2/db;AUTO_SERVER=TRUE")
-//                .put("driver_class", "org.h2.Driver")
-//                .put("user", "root")
-//                .put("password", "123456");
-//
-//        JDBCClient.createShared(vertx, config);
-    }
 }
