@@ -1,12 +1,16 @@
 <template>
   <div>
-    <div class="chatContent"></div>
+    <div class="chatContent">
+      <chat-bubble/>
+    </div>
     <textarea id="chatBox" cols="30" rows="10"></textarea>
     <button type="button" onclick="submit()">提交</button>
   </div>
 </template>
 
 <script>
+import ChatBubble from './ChatBubble.vue'
+
 export default {
   name: 'ChatRoom',
   data () {
@@ -20,25 +24,12 @@ export default {
       console.log('submit')
       // })
     }
-  }
+  },
+  components: {ChatBubble}
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1,
-h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+
 </style>
