@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Primary;
  * Created by wangkai on 2017/10/29.
  */
 @SpringBootConfiguration
-public class VertxConfig {
+public class VertxAutoConfiguration {
 
     @Bean
     public Vertx vertx() {
