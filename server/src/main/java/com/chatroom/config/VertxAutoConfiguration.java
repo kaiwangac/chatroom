@@ -1,18 +1,28 @@
 package com.chatroom.config;
 
-import com.chatroom.constant.RouterPath;
+import com.chatroom.handler.JerseyHandler;
 import io.vertx.core.Vertx;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.StaticHandler;
-import org.springframework.boot.SpringBootConfiguration;
+import org.glassfish.jersey.server.spi.Container;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+
+import javax.ws.rs.core.UriBuilder;
+import java.net.URI;
 
 /**
  * Created by wangkai on 2017/10/29.
  */
-@SpringBootConfiguration
+@Configuration
+@AutoConfigureAfter(JerseyAutoConfiguration.class)
 public class VertxAutoConfiguration {
+
+    @Autowired
+    private Container container;
 
     @Bean
     public Vertx vertx() {
@@ -23,7 +33,7 @@ public class VertxAutoConfiguration {
     @Bean
     public Router mainRouter(Vertx vertx) {
         Router router = Router.router(vertx);
-        router.route(RouterPath.STATIC).handler(StaticHandler.create());
+        router.route("/static/*").handler(StaticHandler.create());
         return router;
     }
 
@@ -31,7 +41,10 @@ public class VertxAutoConfiguration {
     @Primary
     public Router restRouter(Vertx vertx, Router mainRouter) {
         Router router = Router.router(vertx);
-        mainRouter.mountSubRouter(RouterPath.REST, router);
+        mainRouter.mountSubRouter("/rest/v1/", router);
+
+        URI baseUri = UriBuilder.fromUri("/rest/v1/").build();
+        router.route().handler(JerseyHandler.create(baseUri, vertx, container));
         return router;
     }
 }

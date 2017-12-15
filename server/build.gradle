@@ -22,6 +22,8 @@ repositories {
 
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter'
+    compile 'org.hibernate:hibernate-validator:5.3.5.Final'
+    compile 'org.glassfish.jersey.core:jersey-server:2.25.1'
 
     compile 'io.vertx:vertx-web:3.4.2'
     compile 'io.vertx:vertx-jdbc-client:3.4.2'
