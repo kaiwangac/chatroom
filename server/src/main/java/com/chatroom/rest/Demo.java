@@ -9,4 +9,8 @@ public class Demo {
     public String get() {
         return "test";
     }
+
+    @GET
+    @Path(value="/liu")
+    public String get2() {return "liu";}
 }
